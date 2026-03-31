@@ -1004,4 +1004,20 @@
         } else {
           handleQR('zamowienie', '🛵 Zamówienie');
         }
-        in
+        input.focus();
+      });
+    }
+
+    /* Badge po 4 sekundach */
+    setTimeout(function() {
+      if (!chatOpen) {
+        badge.style.display = 'flex';
+        badge.textContent = '1';
+      }
+    }, 4000);
+
+  })();
+  </script>
+
+</body>
+</html>
