@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Burger House — Najlepsze Burgery w Mieście</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --red:    #E63312;
+      --dark:   #1a1a1a;
+      --yellow: #F5C518;
+      --gray:   #f5f5f5;
+      --white:  #ffffff;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--dark);
+      background: var(--white);
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--red);
+      color: #fff;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: .3px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff;
+      border-bottom: 2px solid #f0f0f0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px;
+    }
+    .nav-logo {
+      font-size: 22px; font-weight: 900; color: var(--dark);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--dark);
+      font-weight: 600; font-size: 15px;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--red); }
+    .nav-cta {
+      background: var(--red); color: #fff;
+      padding: 10px 22px; border-radius: 30px;
+      font-weight: 700; font-size: 15px;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: #c42c0e; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #fffbe6 0%, #fff3cd 100%);
+      padding: 80px 32px 70px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 60px; flex-wrap: wrap;
+    }
+    .hero-text { max-width: 520px; }
+    .hero-badge {
+      display: inline-block;
+      background: var(--yellow); color: var(--dark);
+      padding: 6px 16px; border-radius: 30px;
+      font-size: 13px; font-weight: 700; margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(38px, 6vw, 64px);
+      font-weight: 900; line-height: 1.05;
+      margin-bottom: 18px;
+    }
+    .hero h1 span { color: var(--red); display: block; }
+    .hero p {
+      font-size: 17px; color: #555; line-height: 1.7; margin-bottom: 32px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--red); color: #fff;
+      padding: 14px 30px; border-radius: 30px;
+      font-weight: 700; font-size: 16px;
+      text-decoration: none; transition: background .2s;
+    }
+    .btn-primary:hover { background: #c42c0e; }
+    .btn-outline {
+      border: 2px solid var(--dark); color: var(--dark);
+      padding: 12px 28px; border-radius: 30px;
+      font-weight: 700; font-size: 16px;
+      text-decoration: none; transition: all .2s;
+    }
+    .btn-outline:hover { background: var(--dark); color: #fff; }
+    .hero-emoji {
+      font-size: clamp(80px, 14vw, 140px);
+      line-height: 1; user-select: none;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      background: var(--dark);
+      display: flex; justify-content: center; flex-wrap: wrap;
+      gap: 0;
+    }
+    .stat {
+      padding: 24px 48px; text-align: center;
+      border-right: 1px solid rgba(255,255,255,.1);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num { font-size: 28px; font-weight: 900; color: var(--yellow); }
+    .stat-label { font-size: 13px; color: rgba(255,255,255,.6); margin-top: 4px; }
+
+    /* ── MENU ── */
+    .menu-section { padding: 70px 32px; background: var(--white); }
+    .section-title {
+      text-align: center; font-size: 14px; font-weight: 700;
+      color: var(--red); text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .section-heading {
+      text-align: center; font-size: clamp(26px, 4vw, 40px);
+      font-weight: 900; margin-bottom: 12px;
+    }
+    .section-sub {
+      text-align: center; color: #888; font-size: 15px; margin-bottom: 50px;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px; max-width: 1100px; margin: 0 auto;
+    }
+    .menu-card {
+      background: var(--gray); border-radius: 18px;
+      padding: 28px 24px; position: relative;
+      transition: transform .2s, box-shadow .2s;
+      cursor: default;
+    }
+    .menu-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.1); }
+    .menu-card-emoji { font-size: 40px; margin-bottom: 14px; display: block; }
+    .menu-card h3 { font-size: 19px; font-weight: 800; margin-bottom: 8px; }
+    .menu-card p { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 16px; }
+    .menu-card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .menu-price { font-size: 20px; font-weight: 900; color: var(--red); }
+    .menu-add {
+      background: var(--red); color: #fff;
+      border: none; border-radius: 50%;
+      width: 36px; height: 36px; font-size: 22px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .menu-add:hover { background: #c42c0e; }
+
+    /* ── INFO ── */
+    .info-section {
+      background: var(--gray); padding: 70px 32px;
+      display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+    }
+    .info-card {
+      background: #fff; border-radius: 20px; padding: 36px 32px;
+      min-width: 280px; flex: 1; max-width: 380px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.07);
+    }
+    .info-card h3 {
+      font-size: 13px; font-weight: 700; color: var(--red);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;
+    }
+    .info-card h2 { font-size: 22px; font-weight: 900; margin-bottom: 20px; }
+    .hours-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+      font-size: 15px;
+    }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-day { font-weight: 600; }
+    .hours-time { color: var(--red); font-weight: 700; }
+    .address-line { font-size: 15px; color: #555; line-height: 1.9; }
+    .address-line strong { color: var(--dark); }
+    .map-btn {
+      display: inline-block; margin-top: 18px;
+      background: var(--dark); color: #fff;
+      padding: 11px 24px; border-radius: 30px;
+      font-weight: 700; font-size: 14px; text-decoration: none;
+      transition: background .2s;
+    }
+    .map-btn:hover { background: #333; }
+
+    /* ── ORDER / DELIVERY ── */
+    #order {
+      background: var(--red); padding: 70px 32px; text-align: center;
+    }
+    #order h2 {
+      font-size: clamp(26px, 4vw, 38px); font-weight: 900;
+      color: #fff; margin-bottom: 12px;
+    }
+    #order p { color: rgba(255,255,255,.85); font-size: 16px; margin-bottom: 36px; }
+    .delivery-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .delivery-btn {
+      background: #fff; border-radius: 14px;
+      padding: 14px 28px; font-weight: 700; font-size: 15px;
+      text-decoration: none; color: var(--dark);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .delivery-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.2); }
+    .delivery-btn.chat-btn {
+      background: var(--yellow); color: var(--dark);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark); color: rgba(255,255,255,.6);
+      text-align: center; padding: 28px 32px;
+      font-size: 13px; line-height: 1.8;
+    }
+    footer strong { color: #fff; }
+    footer a { color: var(--yellow); text-decoration: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 12px 16px; }
+      .nav-links { display: none; }
+      .hero { padding: 50px 20px; }
+      .stat { padding: 18px 24px; }
+      .menu-section { padding: 50px 16px; }
+      .info-section { padding: 50px 16px; }
+    }
+
+    /* ════════════════════════════════════
+       CHATBOT BURGER HOUSE — CookPlanAI
+       ════════════════════════════════════ */
+    #bh-chat-btn {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9998;
+      width: 62px; height: 62px; border-radius: 50%;
+      background: var(--red); border: none; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(230,51,18,.5);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .2s, box-shadow .2s;
+    }
+    #bh-chat-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(230,51,18,.6); }
+    #bh-chat-btn svg { width: 28px; height: 28px; fill: #fff; }
+    #bh-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: var(--yellow); color: var(--dark);
+      font-size: 10px; font-weight: 800;
+      width: 20px; height: 20px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+      font-family: sans-serif; border: 2px solid #fff;
+    }
+    #bh-chat-window {
+      position: fixed; bottom: 98px; right: 24px; z-index: 9999;
+      width: 360px; max-height: 570px;
+      background: #fff; border-radius: 22px;
+      box-shadow: 0 10px 48px rgba(0,0,0,.18);
+      display: flex; flex-direction: column;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      overflow: hidden;
+      transform: scale(0.92) translateY(16px); opacity: 0;
+      pointer-events: none;
+      transition: transform .28s cubic-bezier(.34,1.56,.64,1), opacity .2s;
+    }
+    #bh-chat-window.open {
+      transform: scale(1) translateY(0); opacity: 1; pointer-events: all;
+    }
+    #bh-header {
+      background: var(--red); padding: 14px 18px;
+      display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+    }
+    #bh-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: #fff; display: flex; align-items: center;
+      justify-content: center; font-size: 22px; flex-shrink: 0;
+    }
+    #bh-header-info { flex: 1; }
+    #bh-header-name { color: #fff; font-weight: 700; font-size: 15px; margin: 0; line-height: 1.3; }
+    #bh-header-status { color: rgba(255,255,255,.8); font-size: 12px; margin: 0; }
+    #bh-close-btn {
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,.8); font-size: 24px; line-height: 1;
+      padding: 0; transition: color .15s;
+    }
+    #bh-close-btn:hover { color: #fff; }
+    #bh-messages {
+      flex: 1; overflow-y: auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      scroll-behavior: smooth; min-height: 0;
+    }
+    #bh-messages::-webkit-scrollbar { width: 4px; }
+    #bh-messages::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 4px; }
+    .bh-msg {
+      max-width: 84%; font-size: 14px; line-height: 1.55;
+      padding: 10px 14px; border-radius: 18px;
+      animation: bhPop .2s ease; word-break: break-word;
+    }
+    @keyframes bhPop {
+      from { opacity: 0; transform: translateY(7px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .bh-msg.bot {
+      background: #f4f4f4; color: #1a1a1a;
+      border-bottom-left-radius: 4px; align-self: flex-start;
+    }
+    .bh-msg.user {
+      background: var(--red); color: #fff;
+      border-bottom-right-radius: 4px; align-self: flex-end;
+    }
+    .bh-msg.success {
+      background: #E8F5E9; color: #2E7D32; font-size: 13px;
+      border: 1px solid #A5D6A7; align-self: center;
+      text-align: center; white-space: pre-line;
+    }
+    .bh-typing {
+      background: #f4f4f4; border-radius: 18px; border-bottom-left-radius: 4px;
+      padding: 13px 16px; align-self: flex-start;
+      display: flex; gap: 5px; align-items: center; flex-shrink: 0;
+    }
+    .bh-typing span {
+      width: 7px; height: 7px; border-radius: 50%; background: #bbb;
+      animation: bhDot 1.2s infinite;
+    }
+    .bh-typing span:nth-child(2) { animation-delay: .2s; }
+    .bh-typing span:nth-child(3) { animation-delay: .4s; }
+    @keyframes bhDot {
+      0%,60%,100% { transform: translateY(0); }
+      30%          { transform: translateY(-6px); }
+    }
+    #bh-quick-replies {
+      display: flex; flex-wrap: wrap; gap: 7px;
+      padding: 4px 14px 8px; flex-shrink: 0;
+    }
+    .bh-qr {
+      background: #fff; border: 2px solid var(--red); color: var(--red);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .15s; white-space: nowrap;
+      font-family: inherit;
+    }
+    .bh-qr:hover { background: var(--red); color: #fff; }
+    .bh-qr.yellow {
+      border-color: var(--yellow); color: #7a5700; background: #FFF8E1;
+    }
+    .bh-qr.yellow:hover { background: var(--yellow); color: #1a1a1a; }
+    #bh-input-row {
+      display: flex; gap: 8px; padding: 10px 12px 14px;
+      border-top: 1px solid #f0f0f0; flex-shrink: 0;
+    }
+    #bh-input {
+      flex: 1; border: 1.5px solid #e0e0e0; border-radius: 12px;
+      padding: 9px 14px; font-size: 14px; outline: none;
+      transition: border-color .2s; font-family: inherit;
+    }
+    #bh-input:focus { border-color: var(--red); }
+    #bh-send {
+      background: var(--red); border: none; border-radius: 12px;
+      width: 42px; height: 42px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s; flex-shrink: 0;
+    }
+    #bh-send:hover { background: #c42c0e; }
+    #bh-send svg { width: 18px; height: 18px; fill: #fff; }
+    .bh-menu-card {
+      background: #fff; border: 1.5px solid #efefef;
+      border-radius: 12px; padding: 10px 12px; margin: 2px 0; font-size: 13px;
+    }
+    .bh-item-name { font-weight: 700; color: #1a1a1a; }
+    .bh-item-price { color: var(--red); font-weight: 700; float: right; }
+    .bh-item-desc { color: #777; font-size: 12px; margin-top: 3px; clear: both; }
+    .bh-promo-card {
+      background: #FFF8E1; border: 1.5px solid var(--yellow);
+      border-radius: 12px; padding: 11px 13px; margin: 2px 0; font-size: 13px;
+    }
+    .bh-promo-title { font-weight: 700; color: #1a1a1a; }
+    .bh-promo-badge { color: #7a5700; font-weight: 700; float: right; }
+    .bh-promo-desc { color: #7a5700; font-size: 12px; margin-top: 3px; clear: both; }
+    @media (max-width: 400px) {
+      #bh-chat-window { width: calc(100vw - 28px); right: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    🍔 &nbsp; Zamów przez czat i odbierz 15% rabat na pierwsze zamówienie! &nbsp; 🍔
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">🍔 Burger <span>House</span></a>
+    <ul class="nav-links">
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#info">Godziny</a></li>
+      <li><a href="#order">Zamów Online</a></li>
+    </ul>
+    <a href="tel:500111222" class="nav-cta">📞 Zadzwoń</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <span class="hero-badge">🏆 &nbsp;#1 Burgerownia w mieście</span>
+      <h1>Prawdziwy<span>Smak USA</span></h1>
+      <p>Soczyste burgery z wołowiny, crispy boczek i autorskie sosy.<br>
+         Każdy burger robiony na zamówienie — żadnej linii produkcyjnej.</p>
+      <div class="hero-btns">
+        <a href="#menu" class="btn-primary">🍔 Zobacz menu</a>
+        <a href="#order" class="btn-outline">Zamów online</a>
+      </div>
+    </div>
+    <div class="hero-emoji">🍔</div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">12+</div>
+      <div class="stat-label">rodzajów burgerów</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4.9 ⭐</div>
+      <div class="stat-label">ocena klientów</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">15 min</div>
+      <div class="stat-label">czas realizacji</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">świeże składniki</div>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <section class="menu-section" id="menu">
+    <p class="section-title">Co dzisiaj zjesz?</p>
+    <h2 class="section-heading">Nasze Menu</h2>
+    <p class="section-sub">Wszystkie burgery serwowane z frytkami lub sałatką. Zapytaj o wersję wegańską!</p>
+
+    <div class="menu-grid">
+
+      <div class="menu-card">
+        <span class="menu-card-emoji">🍔</span>
+        <h3>Burger Classic</h3>
+        <p>Wołowina, ser cheddar, pikle, ketchup. Klasyk, który nigdy nie zawodzi.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">40 zł</span>
+          <button class="menu-add" aria-label="Dodaj do zamówienia">+</button>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <span class="menu-card-emoji">🍔</span>
+        <h3>Burger Double</h3>
+        <p>Podwójna wołowina, ser, sałata, pomidor, pikle, ketchup. Dla prawdziwych głodomorów.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">55 zł</span>
+          <button class="menu-add" aria-label="Dodaj do zamówienia">+</button>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <span class="menu-card-emoji">🍔</span>
+        <h3>Burger Drwala</h3>
+        <p>Wołowina, panierowany ser, sałata, pomidor, pikle, ketchup. Solidna porcja!</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">59 zł</span>
+          <button class="menu-add" aria-label="Dodaj do zamówienia">+</button>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <span class="menu-card-emoji">🍟</span>
+        <h3>Frytki</h3>
+        <p>Złociste frytki belgijskie, chrupiące z zewnątrz, miękkie w środku.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">15 zł</span>
+          <button class="menu-add" aria-label="Dodaj do zamówienia">+</button>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <span class="menu-card-emoji">🧅</span>
+        <h3>Krążki Cebulowe</h3>
+        <p>Chrupiące krążki w cieście piwnym. Idealne do burgera lub samodzielnie.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">15 zł</span>
+          <button class="menu-add" aria-label="Dodaj do zamówienia">+</button>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <span class="menu-card-emoji">🥤</span>
+        <h3>Napoje</h3>
+        <p>Cola, Sprite lub Woda niegazowana 0,5l. Zimne, orzeźwiające.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">8 zł</span>
+          <button class="menu-add" aria-label="Dodaj do zamówienia">+</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- INFO -->
+  <section class="info-section" id="info">
+
+    <div class="info-card">
+      <h3>Kiedy nas znajdziesz?</h3>
+      <h2>Godziny Otwarcia</h2>
+      <div class="hours-row">
+        <span class="hours-day">Poniedziałek – Czwartek</span>
+        <span class="hours-time">11:00 – 22:00</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Piątek – Sobota</span>
+        <span class="hours-time">11:00 – 23:00</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Niedziela</span>
+        <span class="hours-time">12:00 – 21:00</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3>Gdzie jesteśmy?</h3>
+      <h2>Nasz Adres</h2>
+      <p class="address-line">
+        <strong>📍 ul. Słoneczna 70a</strong><br>
+        62-500 Konin<br><br>
+        🅿️ Bezpłatny parking od strony ul. Bocznej<br>
+        📞 <a href="tel:500111222" style="color:var(--red);font-weight:700">500 111 222</a>
+      </p>
+      <a href="https://maps.google.com" target="_blank" class="map-btn">🗺️ Otwórz w Google Maps</a>
+    </div>
+
+  </section>
+
+  <!-- ORDER / DELIVERY -->
+  <section id="order">
+    <h2>Zamów z dostawą do domu! 🛵</h2>
+    <p>Dowozimy w 30–45 minut. Dostępni na wszystkich platformach.</p>
+    <div class="delivery-btns">
+      <a href="#" class="delivery-btn">🟠 Glovo</a>
+      <a href="#" class="delivery-btn">🔵 Bolt Food</a>
+      <a href="#" class="delivery-btn">🔴 Pyszne.pl</a>
+      <a href="#" class="delivery-btn chat-btn" id="order-chat-btn">💬 Zamów przez czat →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 <strong>Burger House</strong>. Najlepsze burgery w mieście.<br>
+    📞 <a href="tel:500111222">500 111 222</a> &nbsp;|&nbsp;
+    📧 <a href="/cdn-cgi/l/email-protection#71181f171e31130403161403191e0402145f011d"><span class="__cf_email__" data-cfemail="4c25222a230c2e393e2b293e2423393f29623c20">[email&#160;protected]</span></a><br>
+    <small style="opacity:.5;margin-top:6px;display:block">
+      Strona stworzona jako demo portfolio — CookPlanAI
+    </small>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════
+       CHATBOT — CookPlanAI
+       Podmień WEBHOOK_URL na swój adres Make
+       ═══════════════════════════════════════ -->
+  <script>
+  (function () {
+
+    /* ─── KONFIGURACJA ─────────────────────────────── */
+    var WEBHOOK_REZERWACJA = 'https://hook.eu1.make.com/mnh42nvd4u8mxg51soj5g4g44n3y3isa';
+    var WEBHOOK_ZAMOWIENIE = 'WKLEJ_WEBHOOK_ZAMOWIENIE_Z_MAKE';
+    /* ─────────────────────────────────────────────── */
+
+    var MENU = [
+      { name: 'Burger Classic',  price: '40 zł', desc: 'wołowina, ser, pikle, ketchup',                              emoji: '🍔' },
+      { name: 'Burger Double',   price: '55 zł', desc: 'podwójna wołowina, ser, sałata, pomidor, pikle, ketchup',    emoji: '🍔' },
+      { name: 'Burger Drwala',   price: '59 zł', desc: 'wołowina, panierowany ser, sałata, pomidor, pikle, ketchup', emoji: '🍔' },
+      { name: 'Frytki',          price: '15 zł', desc: 'złociste frytki belgijskie',                                  emoji: '🍟' },
+      { name: 'Krążki Cebulowe', price: '15 zł', desc: 'chrupiące krążki w cieście piwnym',                          emoji: '🧅' },
+      { name: 'Cola',            price:  '8 zł', desc: '0,33l',                                                       emoji: '🥤' },
+      { name: 'Sprite',          price:  '8 zł', desc: '0,33l',                                                       emoji: '🥤' },
+      { name: 'Woda',            price:  '8 zł', desc: '0,5l niegazowana',                                            emoji: '💧' },
+    ];
+
+    /* ─── STAN ─── */
+    var chatOpen = false;
+    var flow     = null;
+    var step     = 0;
+    var collected = {};
+
+    /* ─── HTML ─── */
+    document.body.insertAdjacentHTML('beforeend', [
+      '<button id="bh-chat-btn" aria-label="Otwórz czat">',
+        '<div id="bh-badge">1</div>',
+        '<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',
+      '</button>',
+      '<div id="bh-chat-window" role="dialog" aria-label="Czat Burger House">',
+        '<div id="bh-header">',
+          '<div id="bh-avatar">🍔</div>',
+          '<div id="bh-header-info">',
+            '<p id="bh-header-name">Burger House</p>',
+            '<p id="bh-header-status">● Online — odpowiadamy natychmiast</p>',
+          '</div>',
+          '<button id="bh-close-btn" aria-label="Zamknij">×</button>',
+        '</div>',
+        '<div id="bh-messages"></div>',
+        '<div id="bh-quick-replies"></div>',
+        '<div id="bh-input-row">',
+          '<input id="bh-input" type="text" placeholder="Napisz wiadomość..." autocomplete="off" />',
+          '<button id="bh-send" aria-label="Wyślij">',
+            '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>',
+          '</button>',
+        '</div>',
+      '</div>',
+    ].join(''));
+
+    /* ─── ELEMENTY ─── */
+    var btn      = document.getElementById('bh-chat-btn');
+    var win      = document.getElementById('bh-chat-window');
+    var msgs     = document.getElementById('bh-messages');
+    var qrBox    = document.getElementById('bh-quick-replies');
+    var input    = document.getElementById('bh-input');
+    var sendBtn  = document.getElementById('bh-send');
+    var closeBtn = document.getElementById('bh-close-btn');
+    var badge    = document.getElementById('bh-badge');
+
+    /* ─── HELPERS ─── */
+    function addMsg(text, type, isHTML) {
+      var div = document.createElement('div');
+      div.className = 'bh-msg ' + (type || 'bot');
+      if (isHTML) div.innerHTML = text; else div.textContent = text;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+      return div;
+    }
+
+    function showTyping() {
+      var t = document.createElement('div');
+      t.className = 'bh-typing'; t.id = 'bh-typing';
+      t.innerHTML = '<span></span><span></span><span></span>';
+      msgs.appendChild(t); msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeTyping() {
+      var t = document.getElementById('bh-typing');
+      if (t) t.remove();
+    }
+
+    function botSay(text, delay, isHTML) {
+      return new Promise(function(resolve) {
+        showTyping();
+        setTimeout(function() {
+          removeTyping();
+          addMsg(text, 'bot', isHTML);
+          resolve();
+        }, delay || 600);
+      });
+    }
+
+    function setQR(list) {
+      qrBox.innerHTML = '';
+      list.forEach(function(r) {
+        var b = document.createElement('button');
+        b.className = 'bh-qr' + (r.style === 'yellow' ? ' yellow' : '');
+        b.textContent = r.label;
+        b.onclick = function() { handleQR(r.value || r.label, r.label); };
+        qrBox.appendChild(b);
+      });
+    }
+
+    function clearQR() { qrBox.innerHTML = ''; }
+
+    function ts() {
+      return new Date().toLocaleString('pl-PL', {
+        day:'2-digit', month:'2-digit', year:'numeric',
+        hour:'2-digit', minute:'2-digit'
+      });
+    }
+
+    /* ─── GŁÓWNE MENU ─── */
+    function showMainMenu() {
+      flow = null; step = 0; collected = {};
+      setQR([
+        { label: '🍔 Menu',        value: 'menu' },
+        { label: '🎁 Promocje',    value: 'promocje' },
+        { label: '📅 Rezerwacja',  value: 'rezerwacja' },
+        { label: '🛵 Zamówienie',  value: 'zamowienie' },
+        { label: '📍 Kontakt',     value: 'kontakt' },
+      ]);
+    }
+
+    /* ─── POWITANIE ─── */
+    async function welcome() {
+      await botSay('Cześć! 👋 Witaj w Burger House — prawdziwy smak USA! 🍔', 700);
+      await botSay('W czym mogę pomóc?', 400);
+      showMainMenu();
+    }
+
+    /* ─── MENU ─── */
+    async function showMenu() {
+      clearQR();
+      await botSay('Oto nasze menu 😋', 500);
+
+      var burgery  = MENU.filter(function(i){ return i.name.includes('Burger'); });
+      var dodatki  = MENU.filter(function(i){ return ['Frytki','Krążki Cebulowe'].includes(i.name); });
+      var napoje   = MENU.filter(function(i){ return ['Cola','Sprite','Woda'].includes(i.name); });
+
+      function cards(items, title) {
+        var html = '<div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px">' + title + '</div>';
+        items.forEach(function(it) {
+          html += '<div class="bh-menu-card">'
+            + '<span class="bh-item-name">' + it.emoji + ' ' + it.name + '</span>'
+            + '<span class="bh-item-price">' + it.price + '</span>'
+            + '<div class="bh-item-desc">' + it.desc + '</div>'
+            + '</div>';
+        });
+        return html;
+      }
+
+      setTimeout(function(){ addMsg(cards(burgery, 'Burgery'), 'bot', true); }, 800);
+      setTimeout(function(){ addMsg(cards(dodatki, 'Dodatki'), 'bot', true); }, 1100);
+      setTimeout(function(){ addMsg(cards(napoje,  'Napoje'),  'bot', true); }, 1400);
+      setTimeout(async function() {
+        await botSay('Smaczne, prawda? 😄 Co chcesz zrobić?', 200);
+        setQR([
+          { label: '🛵 Zamów teraz',       value: 'zamowienie' },
+          { label: '📅 Zarezerwuj stolik', value: 'rezerwacja' },
+          { label: '🎁 Promocje',          value: 'promocje' },
+          { label: '↩ Wróć',              value: 'back' },
+        ]);
+      }, 1700);
+    }
+
+    /* ─── PROMOCJE ─── */
+    async function showPromocje() {
+      clearQR();
+      await botSay('Aktualne promocje dla Ciebie 🎁', 500);
+      setTimeout(function() {
+        addMsg(
+          '<div class="bh-promo-card"><span class="bh-promo-title">🌟 Zamów przez czat</span>'
+          + '<span class="bh-promo-badge">-15%</span>'
+          + '<div class="bh-promo-desc">15% rabatu na pierwsze zamówienie złożone przez czat!</div></div>'
+          + '<div class="bh-promo-card" style="margin-top:6px"><span class="bh-promo-title">🥤 Promocja miesiąca</span>'
+          + '<span class="bh-promo-badge">GRATIS</span>'
+          + '<div class="bh-promo-desc">Cola gratis przy zamówieniu burgera + frytek!</div></div>',
+          'bot', true
+        );
+      }, 700);
+      setTimeout(async function() {
+        await botSay('Skorzystasz? 😄', 200);
+        setQR([
+          { label: '🛵 Zamów z rabatem',   value: 'zamowienie' },
+          { label: '📅 Zarezerwuj stolik', value: 'rezerwacja' },
+          { label: '↩ Wróć',              value: 'back' },
+        ]);
+      }, 1000);
+    }
+
+    /* ─── KONTAKT ─── */
+    async function showKontakt() {
+      clearQR();
+      await botSay(
+        '📍 <strong>ul. Słoneczna 70a, Konin</strong><br>'
+        + '📞 <a href="tel:500111222" style="color:#E63312;font-weight:700">500 111 222</a><br><br>'
+        + '🕐 <strong>Godziny otwarcia:</strong><br>'
+        + 'Pon–Czw: 11:00–22:00<br>'
+        + 'Pt–Sob:&nbsp; 11:00–23:00<br>'
+        + 'Niedziela: 12:00–21:00',
+        600, true
+      );
+      setTimeout(function() {
+        setQR([
+          { label: '📅 Zarezerwuj stolik', value: 'rezerwacja' },
+          { label: '🛵 Zamów online',      value: 'zamowienie' },
+          { label: '↩ Wróć',              value: 'back' },
+        ]);
+      }, 800);
+    }
+
+    /* ─── REZERWACJA ─── */
+    var REZ = [
+      { key: 'termin',  q: 'Podaj datę i godzinę rezerwacji (np. 12 kwietnia 2026 18:30)', ph: 'np. 12 kwietnia 2026 18:30', ok: function(v){ return v.trim().length > 4; } },
+      { key: 'osoby',   q: 'Ile osób będzie przy stoliku?',                               ph: 'np. 4',                ok: function(v){ return /^\d+$/.test(v.trim()) && +v > 0; } },
+      { key: 'imie',    q: 'Imię i nazwisko do rezerwacji?',                              ph: 'np. Jan Kowalski',     ok: function(v){ return v.trim().length > 2; } },
+      { key: 'telefon', q: 'Numer telefonu — oddzwonimy, aby potwierdzić rezerwację.',    ph: 'np. 500111222',        ok: function(v){ return v.replace(/\s/g,'').length >= 9; } },
+    ];
+
+    async function startRez() {
+      flow = 'rezerwacja'; step = 0; collected = {};
+      clearQR();
+      await botSay('Świetnie! Pomogę zarezerwować stolik 📅', 500);
+      await botSay(REZ[0].q, 600);
+      input.placeholder = REZ[0].ph;
+      input.focus();
+    }
+
+    async function handleRezStep(text) {
+      var s = REZ[step];
+      if (!s.ok(text)) { await botSay('Sprawdź czy wpisałeś poprawnie 🙏', 400); return; }
+      collected[s.key] = text;
+      step++;
+      if (step < REZ.length) {
+        input.placeholder = REZ[step].ph;
+        await botSay(REZ[step].q, 600);
+      } else {
+        await submitRez();
+      }
+    }
+
+    async function submitRez() {
+      clearQR(); input.placeholder = 'Napisz wiadomość...';
+      showTyping();
+      var payload = {
+        timestamp:   ts(),
+        termin:      collected.termin,
+        liczba_osob: collected.osoby,
+        imie:        collected.imie,
+        telefon:     collected.telefon,
+        zrodlo:      'chatbot_burger_house',
+      };
+      var ok = false;
+      try {
+        var r = await fetch(WEBHOOK_REZERWACJA, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        ok = r.ok;
+      } catch(e) {}
+      removeTyping();
+      addMsg(
+        '✅ Rezerwacja przyjęta!\n\n'
+        + '📅 ' + collected.termin + '\n'
+        + '👥 ' + collected.osoby + ' os. | ' + collected.imie + '\n'
+        + '📞 ' + collected.telefon + '\n\n'
+        + 'Oddzwonimy wkrótce w celu potwierdzenia.',
+        'success'
+      );
+      flow = null; step = 0;
+      setTimeout(function() {
+        setQR([
+          { label: '🍔 Menu',         value: 'menu' },
+          { label: '🎁 Promocje',     value: 'promocje' },
+          { label: '↩ Menu główne',   value: 'back' },
+        ]);
+      }, 600);
+    }
+
+    /* ─── ZAMÓWIENIE ─── */
+    var ZAM = [
+      { key: 'pozycje', q: 'Co zamawiasz? Wpisz pozycje lub wybierz zestaw poniżej 🍔', ph: 'np. Burger Classic, frytki, Cola', ok: function(v){ return v.trim().length > 2; } },
+      { key: 'imie',    q: 'Imię i nazwisko na zamówienie?',                             ph: 'np. Jan Kowalski',                 ok: function(v){ return v.trim().length > 2; } },
+      { key: 'telefon', q: 'Numer telefonu do kontaktu?',                                ph: 'np. 500111222',                    ok: function(v){ return v.replace(/\s/g,'').length >= 9; } },
+    ];
+
+    async function startZam() {
+      flow = 'zamowienie'; step = 0; collected = {};
+      clearQR();
+      await botSay('Świetnie! Przyjmuję zamówienie 🛵', 500);
+      await botSay('💡 Pamiętaj: 15% rabatu na pierwsze zamówienie przez czat!', 350);
+      await botSay(ZAM[0].q, 500);
+      setQR([
+        { label: 'Classic + Frytki',          value: 'Burger Classic, Frytki' },
+        { label: 'Double + Frytki',           value: 'Burger Double, Frytki' },
+        { label: 'Zestaw Drwala 🔥',          value: 'Burger Drwala, Frytki, Cola', style: 'yellow' },
+      ]);
+      input.placeholder = ZAM[0].ph;
+      input.focus();
+    }
+
+    async function handleZamStep(text) {
+      var s = ZAM[step];
+      if (!s.ok(text)) { await botSay('Wpisz proszę co chcesz zamówić 🙏', 400); return; }
+      collected[s.key] = text;
+      clearQR();
+      step++;
+      if (step < ZAM.length) {
+        input.placeholder = ZAM[step].ph;
+        await botSay(ZAM[step].q, 600);
+      } else {
+        await submitZam();
+      }
+    }
+
+    async function submitZam() {
+      clearQR(); input.placeholder = 'Napisz wiadomość...';
+      showTyping();
+      var payload = {
+        timestamp: ts(),
+        pozycje:   collected.pozycje,
+        imie:      collected.imie,
+        telefon:   collected.telefon,
+        rabat:     'tak - zamówienie przez czat',
+        zrodlo:    'chatbot_burger_house',
+      };
+      var ok = false;
+      try {
+        var r = await fetch(WEBHOOK_ZAMOWIENIE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        ok = r.ok;
+      } catch(e) {}
+      removeTyping();
+      addMsg(
+        '✅ Zamówienie przyjęte!\n\n'
+        + '🍔 ' + collected.pozycje + '\n'
+        + '👤 ' + collected.imie + '\n'
+        + '📞 ' + collected.telefon + '\n'
+        + '🎁 Rabat 15% zastosowany!\n\n'
+        + 'Przygotowujemy Twoje zamówienie 🔥',
+        'success'
+      );
+      flow = null; step = 0;
+      setTimeout(function() {
+        setQR([
+          { label: '📍 Jak dojechać?', value: 'kontakt' },
+          { label: '🎁 Inne promocje', value: 'promocje' },
+          { label: '↩ Menu główne',   value: 'back' },
+        ]);
+      }, 600);
+    }
+
+    /* ─── ROUTER ─── */
+    async function handleQR(value, label) {
+      clearQR();
+      addMsg(label, 'user');
+      if      (value === 'menu')       return showMenu();
+      else if (value === 'promocje')   return showPromocje();
+      else if (value === 'rezerwacja') return startRez();
+      else if (value === 'zamowienie') return startZam();
+      else if (value === 'kontakt')    return showKontakt();
+      else if (value === 'back') {
+        await botSay('Wróciłem do menu 😊', 400);
+        return showMainMenu();
+      }
+      else if (flow === 'rezerwacja')  return handleRezStep(value);
+      else if (flow === 'zamowienie')  return handleZamStep(value);
+    }
+
+    async function handleInput() {
+      var text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      clearQR();
+      addMsg(text, 'user');
+
+      if (flow === 'rezerwacja') return handleRezStep(text);
+      if (flow === 'zamowienie') return handleZamStep(text);
+
+      var t = text.toLowerCase();
+      if (t.match(/menu|jedzenie|co macie|carta/))         return showMenu();
+      if (t.match(/promocj|rabat|ofert|gratis/))           return showPromocje();
+      if (t.match(/rezerwacj|stolik|stół/))                return startRez();
+      if (t.match(/zamów|zamowien|dostaw|kupi/))           return startZam();
+      if (t.match(/adres|kontakt|godzin|gdzie|lokali/))    return showKontakt();
+      if (t.match(/cześć|hej|dzień|siema|witaj|hello/)) {
+        await botSay('Hej! 👋 Miło Cię widzieć! Co mogę zrobić?', 500);
+        return showMainMenu();
+      }
+      await botSay('Nie do końca rozumiem 😅 Wybierz co Cię interesuje:', 500);
+      showMainMenu();
+    }
+
+    /* ─── ZDARZENIA ─── */
+    btn.addEventListener('click', function() {
+      chatOpen = !chatOpen;
+      win.classList.toggle('open', chatOpen);
+      if (chatOpen) {
+        badge.style.display = 'none';
+        if (msgs.children.length === 0) welcome();
+        input.focus();
+      }
+    });
+
+    closeBtn.addEventListener('click', function() {
+      chatOpen = false;
+      win.classList.remove('open');
+    });
+
+    sendBtn.addEventListener('click', handleInput);
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') handleInput();
+    });
+
+    /* Przycisk "Zamów przez czat" w sekcji order */
+    var orderChatBtn = document.getElementById('order-chat-btn');
+    if (orderChatBtn) {
+      orderChatBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        chatOpen = true;
+        win.classList.add('open');
+        badge.style.display = 'none';
+        if (msgs.children.length === 0) {
+          welcome().then(function() {
+            setTimeout(function() { handleQR('zamowienie', '🛵 Zamówienie'); }, 1800);
+          });
+        } else {
+          handleQR('zamowienie', '🛵 Zamówienie');
+        }
+        in
